@@ -12,10 +12,13 @@ async function searchResults(keyword) {
             },
         });
 
+        // Cek apakah response sukses
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            console.error(`HTTP error! Status: ${response.status}`);
+            return [{ title: `Error: HTTP ${response.status}`, image: "", href: "" }];
         }
 
+        // Coba parse JSON
         let data;
         try {
             data = await response.json();
@@ -26,33 +29,22 @@ async function searchResults(keyword) {
 
         console.log("Raw API Response:", data);
 
-        // Pastikan response memiliki data yang valid
-        if (!data || typeof data !== "object") {
+        // Validasi format response
+        if (!data || !Array.isArray(data)) {
             console.error("Error: API response format is incorrect.");
             return [{ title: "Error: Unexpected API response", image: "", href: "" }];
         }
 
-        let animeList = [];
-
-        // Cek apakah response dalam bentuk array atau memiliki properti results
-        if (Array.isArray(data)) {
-            animeList = data;
-        } else if (Array.isArray(data.results)) {
-            animeList = data.results;
-        } else {
-            console.error("Error: API response does not contain expected array.");
-            return [{ title: "Error: No valid data found", image: "", href: "" }];
-        }
-
-        if (animeList.length === 0) {
+        if (data.length === 0) {
+            console.warn("No results found from API.");
             return [{ title: "No results found", image: "", href: "" }];
         }
 
-        // Transformasi data agar sesuai dengan yang diharapkan UI
-        const transformedResults = animeList.map(anime => ({
+        // Transformasi data agar sesuai dengan UI
+        const transformedResults = data.map(anime => ({
             title: anime.title || "No Title",
-            image: anime.image || "",
-            href: anime.link || "#",
+            image: anime.image ? anime.image.replace(/^http:/, "https:") : "",
+            href: anime.link ? anime.link.replace(/^http:/, "https:") : "#",
             score: anime.score || "N/A",
             episode: anime.episode || "Unknown",
         }));
@@ -66,7 +58,7 @@ async function searchResults(keyword) {
     }
 }
 
-// Contoh cara menggunakan fungsi ini di React (atau framework lain)
+// ✅ **Contoh Penggunaan di React**
 useEffect(() => {
     async function fetchData() {
         const results = await searchResults("naruto");
