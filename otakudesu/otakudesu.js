@@ -1,20 +1,13 @@
 async function searchResults(keyword) {
     try {
         const encodedKeyword = encodeURIComponent(keyword);
-        const response = await fetch(`https://otakudesu-anime-api.vercel.app/search?query=${encodedKeyword}`);
+        const response = await fetch(`https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/search?query=${encodedKeyword}`);
         const data = await response.json();
         
-        console.log("API Response:", data);
-
-        if (!data.results || !Array.isArray(data.results)) {
-            console.log("Error: 'results' not found or not an array.");
-            return JSON.stringify([{ title: 'Error', image: '', href: '' }]);
-        }
-
         const transformedResults = data.results.map(anime => ({
-            title: anime.title || 'Unknown Title',
-            image: anime.image || '',
-            href: anime.url || anime.link || '#' // Sesuaikan dengan properti yang ada
+            title: anime.title,
+            image: anime.image,
+            href: `https://otakudesu.cloud/anime/${anime.id}`
         }));
         
         return JSON.stringify(transformedResults);
@@ -28,44 +21,38 @@ async function searchResults(keyword) {
 async function extractDetails(url) {
     try {
         const match = url.match(/https:\/\/otakudesu\.cloud\/anime\/(.+)$/);
-        if (!match) throw new Error("Invalid URL format");
-        
         const encodedID = match[1];
-        const response = await fetch(`https://otakudesu-anime-api.vercel.app/anime/${encodedID}`);
+        const response = await fetch(`https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/anime/${encodedID}`);
         const data = await response.json();
         
-        console.log("Anime Details Response:", data);
+        const animeInfo = data.info;
         
-        const animeInfo = data.info || {};
-        
-        return JSON.stringify([{
+        const transformedResults = [{
             description: animeInfo.synopsis || 'No description available',
             aliases: `Duration: ${animeInfo.duration || 'Unknown'}`,
             airdate: `Aired: ${animeInfo.aired || 'Unknown'}`
-        }]);
+        }];
+        
+        return JSON.stringify(transformedResults);
     } catch (error) {
         console.log('Details error:', error);
-        return JSON.stringify([{ description: 'Error loading description', aliases: 'Duration: Unknown', airdate: 'Aired: Unknown' }]);
+        return JSON.stringify([{
+            description: 'Error loading description',
+            aliases: 'Duration: Unknown',
+            airdate: 'Aired: Unknown'
+        }]);
     }
 }
 
 async function extractEpisodes(url) {
     try {
         const match = url.match(/https:\/\/otakudesu\.cloud\/anime\/(.+)$/);
-        if (!match) throw new Error("Invalid URL format");
-        
         const encodedID = match[1];
-        const response = await fetch(`https://otakudesu-anime-api.vercel.app/anime/${encodedID}/episodes`);
+        const response = await fetch(`https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/anime/${encodedID}/episodes`);
         const data = await response.json();
-        
-        console.log("Episodes Response:", data);
-
-        if (!data.episodes || !Array.isArray(data.episodes)) {
-            return JSON.stringify([]);
-        }
 
         const transformedResults = data.episodes.map(episode => ({
-            href: episode.url || episode.link || '#',
+            href: `https://otakudesu.cloud/episode/${episode.id}`,
             number: episode.number
         }));
         
@@ -80,15 +67,11 @@ async function extractEpisodes(url) {
 async function extractStreamUrl(url) {
     try {
        const match = url.match(/https:\/\/otakudesu\.cloud\/episode\/(.+)$/);
-       if (!match) throw new Error("Invalid URL format");
-       
        const encodedID = match[1];
-       const response = await fetch(`https://otakudesu-anime-api.vercel.app/episode/${encodedID}/sources`);
+       const response = await fetch(`https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/episode/${encodedID}/sources`);
        const data = await response.json();
        
-       console.log("Stream Response:", data);
-
-       const hlsSource = data.sources?.find(source => source.type === 'hls');
+       const hlsSource = data.sources.find(source => source.type === 'hls');
         
         return JSON.stringify({ stream: hlsSource ? hlsSource.url : null });
     } catch (error) {
