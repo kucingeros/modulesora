@@ -12,13 +12,10 @@ async function searchResults(keyword) {
             },
         });
 
-        // Cek apakah response sukses
         if (!response.ok) {
-            console.error(`HTTP error! Status: ${response.status}`);
-            return [{ title: `Error: HTTP ${response.status}`, image: "", href: "" }];
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        // Coba parse JSON
         let data;
         try {
             data = await response.json();
@@ -29,19 +26,32 @@ async function searchResults(keyword) {
 
         console.log("Raw API Response:", data);
 
-        // Validasi format response
-        if (!data || !Array.isArray(data)) {
+        // Pastikan response memiliki data yang valid
+        if (!data || typeof data !== "object") {
             console.error("Error: API response format is incorrect.");
             return [{ title: "Error: Unexpected API response", image: "", href: "" }];
         }
 
-        if (data.length === 0) {
-            console.warn("No results found from API.");
-            return [{ title: "No results found", image: "", href: "" }];
+        let animeList = [];
+
+        // Cek apakah response dalam bentuk array atau memiliki properti results
+        if (Array.isArray(data)) {
+            animeList = data;
+        } else if (Array.isArray(data.results)) {
+            animeList = data.results;
+        } else {
+            console.error("Error: API response does not contain expected array.");
+            return [{ title: "Error: No valid data found", image: "", href: "" }];
         }
 
-        // Transformasi data agar sesuai dengan UI
-        const transformedResults = data.map(anime => ({
+        // Jika animeList kosong, coba ambil informasi lain dari response
+        if (animeList.length === 0) {
+            console.warn("No results found from API. Returning default message.");
+            return [{ title: "No results found for your search", image: "", href: "" }];
+        }
+
+        // Transformasi data agar sesuai dengan yang diharapkan UI
+        const transformedResults = animeList.map(anime => ({
             title: anime.title || "No Title",
             image: anime.image ? anime.image.replace(/^http:/, "https:") : "",
             href: anime.link ? anime.link.replace(/^http:/, "https:") : "#",
@@ -58,7 +68,7 @@ async function searchResults(keyword) {
     }
 }
 
-// ✅ **Contoh Penggunaan di React**
+// Contoh cara menggunakan fungsi ini di React (atau framework lain)
 useEffect(() => {
     async function fetchData() {
         const results = await searchResults("naruto");
