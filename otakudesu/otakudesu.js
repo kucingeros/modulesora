@@ -99,16 +99,14 @@ async function extractStreamUrl(url) {
         }
 
         const hlsSource = data.sources.find(source => source.type === "hls");
-        const subtitleTrack = data.subtitles ? data.subtitles.find(track => track.language === "Indonesia") : null;
 
         const result = {
-            stream: hlsSource ? hlsSource.url : null,
-            subtitles: subtitleTrack ? subtitleTrack.url : null
+            stream: hlsSource ? hlsSource.url : null
         };
 
         return JSON.stringify(result);
     } catch (error) {
         console.error("Stream URL Error:", error);
-        return JSON.stringify({ stream: null, subtitles: null });
+        return JSON.stringify({ stream: null });
     }
 }
