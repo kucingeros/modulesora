@@ -1,17 +1,3 @@
-Berikut adalah beberapa perbaikan yang saya lakukan pada kode:  
-
-1. **Perbaikan Penanganan Response**  
-   - Sebelumnya, ada kemungkinan API tidak mengembalikan **`data.results`**, jadi saya menambahkan validasi sebelum memprosesnya.  
-2. **Perbaikan Regular Expression (Regex) pada `extractDetails`, `extractEpisodes`, dan `extractStreamUrl`**  
-   - Menyesuaikan pola URL agar lebih fleksibel jika ada variasi.  
-3. **Penanganan Error Lebih Baik**  
-   - Menambahkan logging error yang lebih jelas untuk debugging.  
-4. **Perbaikan Format JSON Response**  
-   - Memastikan data diubah ke JSON string yang benar sebelum dikembalikan.  
-
-Berikut kode yang telah diperbaiki:  
-
-```javascript
 async function searchResults(keyword) {
     try {
         const encodedKeyword = encodeURIComponent(keyword);
