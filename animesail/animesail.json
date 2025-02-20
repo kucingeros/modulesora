@@ -1,0 +1,17 @@
+{
+    "sourceName": "AnimeSail",
+    "iconUrl": "https://raw.githubusercontent.com/kucingeros/otakudesumodulesora/main/animesail/animesail.png",
+    "author": {
+        "name": "kucingeros",
+        "icon": "https://avatars.githubusercontent.com/u/155859723?v=4"
+    },
+    "version": "1.0.0",
+    "language": "Indonesia (ID)",
+    "streamType": "HLS",
+    "quality": "720p",
+    "baseUrl": "https://154.26.137.28/api/",
+    "searchBaseUrl": "https://154.26.137.28/api-animesail-x-bacamanga?query=%s",
+    "scriptUrl": "https://raw.githubusercontent.com/kucingeros/otakudesumodulesora/main/animesail/animesail.js",
+    "asyncJS": true,
+    "softsub": true
+}
