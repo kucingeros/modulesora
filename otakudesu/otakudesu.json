@@ -1,6 +1,6 @@
 {
     "sourceName": "Otakudesu",
-    "iconUrl": "https://raw.githubusercontent.com/kucingeros/otakudesumodulesora/main/otakudesu/otakudesu.js",
+    "iconUrl": "https://raw.githubusercontent.com/kucingeros/otakudesumodulesora/main/otakudesu/icon.png",
     "author": {
         "name": "kucingeros",
         "icon": "https://avatars.githubusercontent.com/u/155859723?v=4"
@@ -11,7 +11,7 @@
     "quality": "720p",
     "baseUrl": "https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/",
     "searchBaseUrl": "https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/search?query=%s",
-    "scriptUrl": "https://raw.githubusercontent.com/kucingeros/otakudesumodulesora/main/otakudesu/otakudesu.js",
+    "scriptUrl": "https://cdn.jsdelivr.net/gh/kucingeros/otakudesumodulesora@main/otakudesu/otakudesu.js",
     "asyncJS": true,
     "softsub": true
 }
