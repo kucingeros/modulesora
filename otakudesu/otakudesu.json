@@ -9,8 +9,8 @@
     "language": "Indonesia (ID)",
     "streamType": "HLS",
     "quality": "720p",
-    "baseUrl": "https://otakudesu-anime-api.vercel.app/",
-    "searchBaseUrl": "https://otakudesu-anime-api.vercel.app/search?query=%s",
+    "baseUrl": "https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/",
+    "searchBaseUrl": "https://unofficial-otakudesu-api-ruang-kreatif.vercel.app/api/search?query=%s",
     "scriptUrl": "https://cdn.jsdelivr.net/gh/kucingeros/otakudesumodulesora@main/otakudesu/otakudesu.js",
     "asyncJS": true,
     "softsub": true
